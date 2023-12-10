@@ -1,3 +1,4 @@
+#importing libraries
 import pandas as pd
 import streamlit as st
 from streamlit_option_menu import option_menu
@@ -8,22 +9,22 @@ import cv2
 import os
 import matplotlib.pyplot as plt
 import re
+import pymysql
 
 # SETTING PAGE CONFIGURATIONS
-icon = Image.open("icon.png")
-st.set_page_config(page_title="BizCardX: Extracting Business Card Data with OCR | By BRINDHA",
-                   page_icon=icon,
+st.set_page_config(page_title="BizCardX: Extracting Business Card Data with OCR ",                  
                    layout="wide",
                    initial_sidebar_state="expanded",
                    menu_items={'About': """# This OCR app is created by BRINDHA"""})
 st.markdown("<h1 style='text-align: center; color: white;'>BizCardX: Extracting Business Card Data with OCR</h1>", unsafe_allow_html=True)
 
+
 # SETTING-UP BACKGROUND IMAGE
 def setting_bg():
     st.markdown(f""" 
-    <style>
+<style>
         .stApp {{
-            background: linear-gradient(to right, #2b5876, #4e4376);
+            background: linear-gradient(to right, #0F464E, #5B99A2);
             background-size: cover;
             transition: background 0.5s ease;
         }}
@@ -49,7 +50,7 @@ def setting_bg():
 setting_bg()
 
 # CREATING OPTION MENU
-selected = option_menu(None, ["Home","Upload & Extract","Modify"], 
+selected = option_menu(None, ["Home","Upload & Extract","Modify","About"], 
                        icons=["home","cloud-upload-alt","edit"],
                        default_index=0,
                        orientation="horizontal",
@@ -59,17 +60,17 @@ selected = option_menu(None, ["Home","Upload & Extract","Modify"],
                                "nav-link-selected": {"background-color": "#AB63FA", "color": "white"}})
 
 
-
 # INITIALIZING THE EasyOCR READER
 reader = easyocr.Reader(['en'])
 
 # CONNECTING WITH MYSQL DATABASE
-mydb = sql.connect(host="localhost",
-                   user="root",
-                   password="Ibro@4321",
-                   database= "bizcardx_db"
-                  )
-mycursor = mydb.cursor(buffered=True)
+mydb = pymysql.connect(
+        host="localhost",
+        user="root",
+        password="5070",
+        database="bizcardx_db"
+    )
+mycursor = mydb.cursor()
 #mycursor.execute("create database bizcardx_db")
 
 # TABLE CREATION
@@ -91,11 +92,12 @@ mycursor.execute('''CREATE TABLE IF NOT EXISTS card_data
 # HOME MENU
 if selected == "Home":
     col1,col2 = st.columns(2)
+
     with col1:
-        st.markdown("## :green[**Technologies Used :**] Python,easy OCR, Streamlit, SQL, Pandas")
-        st.markdown("## :green[**Overview :**] In this streamlit web app you can upload an image of a business card and extract relevant information from it using easyOCR. You can view, modify or delete the extracted data in this app. This app would also allow users to save the extracted information into a database along with the uploaded business card image. The database would be able to store multiple entries, each with its own business card image and extracted information.")
-    with col2:
-        st.image("home.png")
+        st.markdown("## :red[**Technologies Used :**] Python,easy OCR, Streamlit, SQL, Pandas")
+        st.markdown("## :red[**Overview :**] In this streamlit web app you can upload an image of a business card and extract relevant information from it using easyOCR. You can view, modify or delete the extracted data in this app. This app would also allow users to save the extracted information into a database along with the uploaded business card image. The database would be able to store multiple entries, each with its own business card image and extracted information.")
+    #with col2:
+        #st.image("C:/Users/BRINDHA/Downloads/nadiia-ploshchenko-rQLY5fKHOrk-unsplash.jpg")
         
         
 # UPLOAD AND EXTRACT MENU
@@ -132,6 +134,7 @@ if selected == "Upload & Extract":
             st.markdown("#     ")
             st.markdown("### You have uploaded the card")
             st.image(uploaded_card)
+            
         # DISPLAYING THE CARD WITH HIGHLIGHTS
         with col2:
             st.markdown("#     ")
@@ -250,7 +253,8 @@ if selected == "Upload & Extract":
                 # the connection is not auto committed by default, so we must commit to save our changes
                 mydb.commit()
             st.success("#### Uploaded to database successfully!")
-        
+
+
 # MODIFY MENU    
 if selected == "Modify":
     col1,col2,col3 = st.columns([3,3,2])
@@ -309,3 +313,14 @@ if selected == "Modify":
         mycursor.execute("select company_name,card_holder,designation,mobile_number,email,website,area,city,state,pin_code from card_data")
         updated_df = pd.DataFrame(mycursor.fetchall(),columns=["Company_Name","Card_Holder","Designation","Mobile_Number","Email","Website","Area","City","State","Pin_Code"])
         st.write(updated_df)
+        
+#ABOUT        
+if selected == "About":
+    col1,col2 = st.columns([3,3],gap="medium")
+    with col1:
+        st.write(":violet[Hello Guys I am Brindha Check My Github and Linkedin] ⬇️")
+        st.write("**:violet[Check My GitHub]** ⬇️")
+        st.write("https://github.com/brindha052002")
+        st.write("**:violet[Linkedin]** ⬇️")
+        st.write("https://www.linkedin.com/in/brindha-s-6740711aa/")
+       
