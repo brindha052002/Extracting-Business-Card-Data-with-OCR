@@ -6,14 +6,18 @@ and a table interface for displaying the extracted data.
 # REQUIREMENT
 Importing libraries:
 
-         streamlit==0.88.0
-         pandas==1.3.3
-         easyocr==1.4
-         mysql-connector-python==8.0.27
-         Pillow==8.3.2
-         opencv-python-headless==4.5.3.56
-         matplotlib==3.4.3
-         streamlit-option-menu==0.0.3
+         import pandas as pd
+         import streamlit as st
+         from streamlit_option_menu import option_menu
+         import easyocr
+         import mysql.connector as sql
+         from PIL import Image
+         import cv2
+         import os
+         import matplotlib.pyplot as plt
+         import re
+         import pymysql
+         
 # WORKFLOW
 1. Install the required packages: You will need to install Python, Streamlit, easyOCR, and a database management system like SQLite or MySQL.
 2. Design the user interface: Create a simple and intuitive user interface using Streamlit that guides users through the process of uploading the business card image and extracting its information. You can use widgets like file uploader, buttons, and text boxes to make the interface more interactive.
